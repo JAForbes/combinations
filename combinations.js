@@ -2,10 +2,7 @@
 var R = require('ramda')
 var _ = require('lodash')
 
-var union = R.curry(function(array,array2){
-	array.push.apply(array,array2)
-	return array;
-})
+var tap = R.flip(R.tap);
 
 var shift = function(array){
 	return function(){
@@ -13,30 +10,31 @@ var shift = function(array){
 	}
 }
 
-
+var pair = _.curry(Array,2);
+var pairWith = _.curry(function(array,item){
+	return R.compose(R.flip(R.map)(array),pair)(item)
+})
 
 var combinations2 = function(items){
 
-	var compareTo = items.slice(1)//copy and skip first
-	var combinations = [];
+	var compareTo = R.tail(items)
 
-	var combinationsFor = R.curry(function(compareTo,item){
-		return R.map(function(compare){
-			return [item,compare];
-		},compareTo)
-	})
 
-	R.pipe(
+	var combinationsFor = R.compose(R.flip(R.map)(compareTo),pair)
+
+	return R.pipe(
 		_.initial,
 		R.map(
 			R.pipe(
-				combinationsFor(compareTo),
-				union(combinations),
-				shift(compareTo)
+				pairWith(compareTo),
+				tap(
+					shift(compareTo)
+				)
 			)
-		)
+		),
+		R.unnest
 	)(items)
-	return combinations;
+
 }
 
 var combinationsN = function(items,n){
