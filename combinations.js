@@ -10,27 +10,43 @@ var shift = function(array){
 	}
 }
 
+/*
+	Pairs two items
+*/
 var pair = _.curry(Array,2);
+
+/*
+	Pairs an item to every item in a list
+*/
 var pairWith = _.curry(function(array,item){
 	return R.compose(R.flip(R.map)(array),pair)(item)
 })
-
-var combinations2 = function(items){
-
-	var otherItems = R.tail(items)//todo somehow remove this reference
-
-	return R.pipe(
-		_.initial,	//reference all but the last item
-		R.map(
-			R.pipe(
-				pairWith(otherItems),	//pair each item with each other item
-				tap(shift(otherItems))	//remove the first item to keep items and otherItems out of sync
-			)
-		),
-		R.unnest //flatten the pairs from each map, into a single layer of pairs
-	)(items)
-
+/*
+	Pairs every item in two lists together without repeating a combination
+*/
+var pairAll = function(list,otherItems){
+	return R.map(
+		R.pipe(
+			pairWith(otherItems),
+			tap(shift(otherItems))
+		)
+	)(list)
 }
+
+/*
+	Turns an array into two arrays, where the first removes it's last
+	and the second remove's it's first.
+
+	Then calls the callback with the two arrays as it's arguments
+*/
+var offset = R.curry(function (callback,array){
+	return R.converge(callback,_.initial,R.tail)(array)
+})
+
+var combinations2 = R.pipe(
+	offset(pairAll),
+	R.unnest
+)
 
 var combinationsN = function(items,n){
 	if(n > 2){
