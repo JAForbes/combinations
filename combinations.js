@@ -10,6 +10,17 @@ var shift = function(array){
 	}
 }
 
+var decrement = R.flip(R.subtract)(1)
+var increment = R.add(1)
+var union = R.curry(R.union)
+var at = R.curry(function(index,array){
+	return array[index];
+})
+var sliceFrom = R.flip(R.converge(
+  R.skip,
+  R.pipe(R.indexOf,increment),
+  R.flip(R.I)
+))
 /*
 	Pairs two items
 */
@@ -48,37 +59,34 @@ var combinations2 = R.pipe(
 	R.unnest
 )
 
-var combinationsN = function(items,n){
+var combinationsN = R.curry(function(n,items){
 	if(n > 2){
 
 		var results = []
-		var sublist = items.slice() //step 1
 
-		analyse = function(){
-				//step 2
-				sublist.shift()
+		R.pipe(
+			R.reject(R.eq(_.last(items))),
+			R.map(function(item){
 
+				return R.pipe(
+					R.converge(
+							R.map,
+							R.pipe(Array,union),
+							R.pipe(sliceFrom(items),combinationsN(decrement(n)))
+					)
+				)(item)
 
-				//step 3
-				var subCombinations = combinationsN(sublist, n -1 )
-				//step 4
-				var item = items[items.length - sublist.length -1]
-				//step 5
-				var combinations = R.map(function(combination){
-					return _.union([item],combination)
-				},subCombinations)
-
+			}),
+			R.unnest,
+			tap(function(combinations){
 				;([]).push.apply(results,combinations);
-				if(sublist.length > n-2){
-					analyse()
-				}
-		}
+			})
+		)(items)
 
-		analyse()
 		return results;
 
 	} else {
 		return combinations2(items)
 	}
-}
-module.exports = combinationsN
+})
+module.exports = R.flip(combinationsN)
