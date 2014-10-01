@@ -94,7 +94,7 @@ The idea is, you ask for combinations recursively down until
 your combination length is just 2.  And when that happens
 we use this function.
 
-    function combinations(){
+    function combinations(items){
 
       var compareTo = items.slice(1)//copy and skip first
       var combinations = [];
