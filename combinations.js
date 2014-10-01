@@ -12,14 +12,30 @@ var shift = function(array){
 
 var decrement = R.flip(R.subtract)(1)
 var increment = R.add(1)
-var at = R.curry(function(index,array){
-	return array[index];
-})
+
+/*
+	Creates a new list that begins after the index of
+	a given item.
+
+	var list = ['A','B','C','D']
+	sliceFrom('B',list) //=> [C,D]
+*/
 var sliceFrom = R.flip(R.converge(
   R.skip,
   R.pipe(R.indexOf,increment),
   R.flip(R.I)
 ))
+
+/*
+	Turns an array into two arrays, where the first removes it's last
+	and the second remove's it's first.
+
+	Then calls the callback with the two arrays as it's arguments
+*/
+var offset = R.curry(function (callback,array){
+	return R.converge(callback,_.initial,R.tail)(array)
+})
+
 /*
 	Pairs two items
 */
@@ -28,9 +44,12 @@ var pair = _.curry(Array,2);
 /*
 	Pairs an item to every item in a list
 */
-var pairWith = _.curry(function(array,item){
-	return R.compose(R.flip(R.map)(array),pair)(item)
-})
+var pairWith = R.flip(R.converge(
+	R.map,
+	R.compose(R.prepend,R.I),
+	R.flip(R.I)
+))
+
 /*
 	Pairs every item in two lists together without repeating a combination
 */
@@ -42,16 +61,6 @@ var pairAll = function(list,otherItems){
 		)
 	)(list)
 }
-
-/*
-	Turns an array into two arrays, where the first removes it's last
-	and the second remove's it's first.
-
-	Then calls the callback with the two arrays as it's arguments
-*/
-var offset = R.curry(function (callback,array){
-	return R.converge(callback,_.initial,R.tail)(array)
-})
 
 var combinations2 = R.pipe(
 	offset(pairAll),
@@ -65,7 +74,7 @@ var combinationsN = R.curry(function(n,items){
 				R.pipe(
 					R.converge(								//converge so push can accept item and combinations
 							R.map,
-							R.flip(R.push),				//push item into combinations
+							R.prepend,				//push item into combinations
 							R.pipe(
 								sliceFrom(items),							//create a copy of the list shifted to the right
 								combinations(decrement(n))		//get all the combinations for the shifted list
