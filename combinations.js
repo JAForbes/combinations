@@ -1,8 +1,15 @@
 /* jshint asi: true, expr: true */
-var R = require('ramda')
-var _ = require('lodash')
+
+var isNode = typeof require != 'undefined'
+if(isNode){
+	var R = require('ramda')
+	var _ = require('lodash')
+}
 
 var tap = R.flip(R.tap);
+var asArray = function(){
+	return _.toArray(arguments)
+}
 
 var shift = function(array){
 	return function(){
@@ -39,16 +46,23 @@ var offset = R.curry(function (callback,array){
 /*
 	Pairs two items
 */
-var pair = _.curry(Array,2);
+var pair = _.curry(asArray,2);
 
 /*
 	Pairs an item to every item in a list
 */
 var pairWith = R.flip(R.converge(
 	R.map,
-	R.compose(R.prepend,R.I),
+	R.compose(R.flip(R.push),R.I),
 	R.flip(R.I)
 ))
+
+var pairWith = _.curry(function(list,item){
+	var pairs = R.map(function(listItem){
+		return [item].concat(listItem)
+	},list)
+	return pairs;
+},2)
 
 /*
 	Pairs every item in two lists together without repeating a combination
@@ -62,10 +76,12 @@ var pairAll = function(list,otherItems){
 	)(list)
 }
 
-var combinations2 = R.pipe(
-	offset(pairAll),
-	R.unnest
-)
+var combinations2 = function(items){
+	return R.pipe(
+		offset(pairAll),
+		R.unnest
+	)(items)
+}
 
 var combinationsN = R.curry(function(n,items){
 		return R.pipe(
@@ -94,4 +110,6 @@ combinations = R.curry(function (n,items){
 	}
 })
 
-module.exports = combinations
+if(isNode){
+		module.exports = combinations
+}

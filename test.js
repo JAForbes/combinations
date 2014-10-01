@@ -20,3 +20,13 @@ expect(
   'Combination Size:5',
   combinations(4,['A','B','C','D','E'])[3],'A,C,D,E'
 )
+
+expect(
+  'Combination Size:2 Number',
+  combinations(2,[1,2,3,4])[5],'3,4'
+)
+
+expect(
+  'Combination Size:3 Object',
+  combinations(2,[{a:1},{b:2},{c:3},{d:3}])[5][0].c,3
+)
