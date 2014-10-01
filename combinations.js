@@ -17,22 +17,17 @@ var pairWith = _.curry(function(array,item){
 
 var combinations2 = function(items){
 
-	var compareTo = R.tail(items)
-
-
-	var combinationsFor = R.compose(R.flip(R.map)(compareTo),pair)
+	var otherItems = R.tail(items)//todo somehow remove this reference
 
 	return R.pipe(
-		_.initial,
+		_.initial,	//reference all but the last item
 		R.map(
 			R.pipe(
-				pairWith(compareTo),
-				tap(
-					shift(compareTo)
-				)
+				pairWith(otherItems),	//pair each item with each other item
+				tap(shift(otherItems))	//remove the first item to keep items and otherItems out of sync
 			)
 		),
-		R.unnest
+		R.unnest //flatten the pairs from each map, into a single layer of pairs
 	)(items)
 
 }
