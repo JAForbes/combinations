@@ -11,7 +11,7 @@ Step 1. create a copy of `items` called `sublist` and an empty array for the res
     sublist = items.slice() //[A,B,C,D]
     results = []
 
-Step 2. `subList` = shift `sublist` by 1
+Step 2. shift sublist by 1 so we don't compare A to A
 
     sublist = sublist.shift() //[B,C,D]
 
@@ -38,7 +38,7 @@ Step 5. join the current `item` with each subCombination
     //  [A,C,D]
     //]
 
-    results.push.apply(result,combinations) //add our combinatiosn to the results
+    results.push.apply(result,combinations) //add our combinations to the results
 
 
 Step 6. Repeat from Step 2.
@@ -69,7 +69,7 @@ Step 6.5. join the current `item` with each subCombination
     //  [B,C,D],
     //]
 
-    results.push.apply(result,combinations) //add our combinatiosn to the results
+    results.push.apply(result,combinations) //add our combinations to the results
 
 Step 7. We can no longer repeat Step 2. because the new `subList`
 would be too short to make a valid combination.
@@ -94,7 +94,7 @@ The idea is, you ask for combinations recursively down until
 your combination length is just 2.  And when that happens
 we use this function.
 
-    function combinations(){
+    function combinations(items){
 
       var compareTo = items.slice(1)//copy and skip first
       var combinations = [];
