@@ -62,28 +62,19 @@ var combinations2 = R.pipe(
 var combinationsN = R.curry(function(n,items){
 	if(n > 2){
 
-		var results = []
-
-		R.pipe(
+		return R.pipe(
 			R.reject(R.eq(_.last(items))),
-			R.map(function(item){
-
-				return R.pipe(
+			R.map(
+				R.pipe(
 					R.converge(
 							R.map,
 							R.pipe(Array,union),
 							R.pipe(sliceFrom(items),combinationsN(decrement(n)))
 					)
-				)(item)
-
-			}),
-			R.unnest,
-			tap(function(combinations){
-				;([]).push.apply(results,combinations);
-			})
+				)
+			),
+			R.unnest
 		)(items)
-
-		return results;
 
 	} else {
 		return combinations2(items)
