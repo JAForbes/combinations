@@ -11,7 +11,7 @@ Step 1. create a copy of `items` called `sublist` and an empty array for the res
     sublist = items.slice() //[A,B,C,D]
     results = []
 
-Step 2. `subList` = shift `sublist` by 1
+Step 2. shift sublist by 1 so we don't compare A to A
 
     sublist = sublist.shift() //[B,C,D]
 
