@@ -12,7 +12,6 @@ var shift = function(array){
 
 var decrement = R.flip(R.subtract)(1)
 var increment = R.add(1)
-var union = R.curry(R.union)
 var at = R.curry(function(index,array){
 	return array[index];
 })
@@ -60,24 +59,30 @@ var combinations2 = R.pipe(
 )
 
 var combinationsN = R.curry(function(n,items){
-	if(n > 2){
-
 		return R.pipe(
-			R.reject(R.eq(_.last(items))),
-			R.map(
+			R.reject(R.eq(_.last(items))), //point to every but the last, as by then we have already referenced it
+			R.map(												//map items
 				R.pipe(
-					R.converge(
+					R.converge(								//converge so push can accept item and combinations
 							R.map,
-							R.pipe(Array,union),
-							R.pipe(sliceFrom(items),combinationsN(decrement(n)))
+							R.flip(R.push),				//push item into combinations
+							R.pipe(
+								sliceFrom(items),							//create a copy of the list shifted to the right
+								combinations(decrement(n))		//get all the combinations for the shifted list
+							)
 					)
 				)
 			),
-			R.unnest
+			R.unnest		//lift each map's combination list into a single list
 		)(items)
+})
 
+combinations = R.curry(function (n,items){
+	if(n > 2){
+		return combinationsN(n,items)
 	} else {
 		return combinations2(items)
 	}
 })
-module.exports = R.flip(combinationsN)
+
+module.exports = combinations
