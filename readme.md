@@ -38,7 +38,7 @@ Step 5. join the current `item` with each subCombination
     //  [A,C,D]
     //]
 
-    results.push.apply(result,combinations) //add our combinatiosn to the results
+    results.push.apply(result,combinations) //add our combinations to the results
 
 
 Step 6. Repeat from Step 2.
@@ -69,7 +69,7 @@ Step 6.5. join the current `item` with each subCombination
     //  [B,C,D],
     //]
 
-    results.push.apply(result,combinations) //add our combinatiosn to the results
+    results.push.apply(result,combinations) //add our combinations to the results
 
 Step 7. We can no longer repeat Step 2. because the new `subList`
 would be too short to make a valid combination.
