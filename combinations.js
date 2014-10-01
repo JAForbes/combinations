@@ -2,21 +2,40 @@
 var R = require('ramda')
 var _ = require('lodash')
 
+var union = R.curry(function(array,array2){
+	array.push.apply(array,array2)
+	return array;
+})
+
+var shift = function(array){
+	return function(){
+			array.shift()
+	}
+}
+
+
+
 var combinations2 = function(items){
 
 	var compareTo = items.slice(1)//copy and skip first
 	var combinations = [];
 
-	for(var i = 0; compareTo.length; i++){
-		combinations.push.apply(combinations,combinationsFor(items[i],compareTo))
-		compareTo.shift()//remove the first item from compareTo to avoid repeating combinations e.g. AB and BA
-	}
-
-	function combinationsFor(item,compareTo){
+	var combinationsFor = R.curry(function(compareTo,item){
 		return R.map(function(compare){
 			return [item,compare];
 		},compareTo)
-	}
+	})
+
+	R.pipe(
+		_.initial,
+		R.map(
+			R.pipe(
+				combinationsFor(compareTo),
+				union(combinations),
+				shift(compareTo)
+			)
+		)
+	)(items)
 	return combinations;
 }
 
