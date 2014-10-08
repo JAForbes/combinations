@@ -30,3 +30,5 @@ expect(
   'Combination Size:3 Object',
   combinations(2,[{a:1},{b:2},{c:3},{d:3}])[5][0].c,3
 )
+
+console.log(combinations(4,[1,2,3,4,5,6]))
