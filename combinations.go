@@ -34,10 +34,12 @@ func main(){
       var lastIterator int;
       if index>0 {
         lastIterator = indexes[index-1]
-
+      }else{
+        lastIterator = 0
       }
+
       fmt.Println(lastIterator)
-      indexes[index] = int( math.Mod(float64(count)/math.Pow(limit,float64(index)),limit) )
+      indexes[lastIterator] = int( math.Mod(float64(count)/math.Pow(limit,float64(lastIterator)),limit) )
     }
     combos["combinations"][count] = indexes
 
