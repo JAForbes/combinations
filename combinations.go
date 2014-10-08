@@ -22,15 +22,13 @@ func main(){
     "combinations": make([][]int,totalInnerIterations),
   }
 
-
-
   for count:=0; count<totalInnerIterations; count++ {
     //[i,j,k,l,m, ...] in a traditional nested for loop
     indexes := make([]int,int(loops))
 
     //generate the indexes
     for index:=0; index<int(loops); index++ {
-      indexes[index] = int( math.Mod(float64(count)/math.Pow(limit,float64(index)),limit) )
+      indexes[int(loops)-1-index] = int( math.Mod(float64(count)/math.Pow(limit,float64(index)),limit) )
     }
     combos["combinations"][count] = indexes
 
