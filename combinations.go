@@ -6,6 +6,7 @@ import (
   "strconv"
   "encoding/json"
   "io/ioutil"
+  "fmt"
 )
 
 func main(){
@@ -30,7 +31,11 @@ func main(){
 
     //generate the indexes
     for index:=0; index<int(loops); index++ {
-      lastIterator:= indexes[index-1]
+
+      if index>0 {
+        lastIterator:= indexes[index-1]
+        fmt.Println(lastIterator)
+      }
       indexes[index] = int( math.Mod(float64(count)/math.Pow(limit,float64(index)),limit) )
     }
     combos["combinations"][count] = indexes
