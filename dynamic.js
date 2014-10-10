@@ -54,4 +54,10 @@ function start(c,s){
   return Math.ceil(Math.pow(c,s) - 1.5*Math.pow(c,s-2)-1)
 }
 
+function greaterThan(c,s){
+  // (c^s-c^(s-1))
+  return Math.pow(c,s) - Math.pow(c,s-1)
+}
+
 console.log('predicted start',start(limit,loops))
+console.log('greaterThan',greaterThan(limit,loops))
