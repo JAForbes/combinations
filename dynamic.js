@@ -48,3 +48,10 @@ eval(
     loops,limit,"console.log(total,["+varNames(loops)+"]); total++"
   )
 )
+
+
+function start(c,s){
+  return Math.pow(c,s) - 1.5*Math.pow(c,s-2)-1
+}
+
+console.log('predicted start',start(limit,loops))
