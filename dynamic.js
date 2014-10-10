@@ -15,7 +15,7 @@ indexesFromCount = R.curry(function (limit,loops,count){
       R.modulo(__,limit),
       Math.floor
     ))(loops)
-  console.log(count,indexes)
+  console.log(count,indexes.reverse())
   return indexes;
 })
 
@@ -45,7 +45,7 @@ var total =0;
 var varNames = R.times(R.pipe(R.add(65),String.fromCharCode))
 eval(
   loopGen(
-    loops,limit,"console.log(total,["+varNames(loops)+"]); total++"
+    loops,limit,"console.log(total,["+varNames(loops)+"].reverse()); total++"
   )
 )
 
