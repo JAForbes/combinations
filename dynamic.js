@@ -6,6 +6,8 @@ var __;
 var totalInnerIterations = Math.pow(limit,loops);
 var indexes = []
 
+
+
 indexesFromCount = R.curry(function (limit,loops,count){
   var indexes = R.times(
     R.pipe(
@@ -59,5 +61,15 @@ function greaterThan(c,s){
   return Math.pow(c,s) - Math.pow(c,s-1)
 }
 
+sumOf = function(func,limit){
+  return R.sum(R.times(func,limit))
+}
+
+start = function(c,s){
+  return sumOf(function(i){
+    return (i+c-s)*Math.pow(c,i)
+  },s)
+}
+
+
 console.log('predicted start',start(limit,loops))
-console.log('greaterThan',greaterThan(limit,loops))
