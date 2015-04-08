@@ -21,7 +21,9 @@ indexesFromCount = R.curry(function (limit,loops,count){
   return indexes;
 })
 
-R.times(indexesFromCount(limit,loops),totalInnerIterations)
+indexesFromCount =
+//
+// R.times(indexesFromCount(limit,loops),totalInnerIterations)
 
 console.log("---")
 
@@ -65,11 +67,63 @@ sumOf = function(func,limit){
   return R.sum(R.times(func,limit))
 }
 
-start = function(c,s){
+start = R.curry(function(c,s){
   return sumOf(function(i){
     return (i+c-s)*Math.pow(c,i)
   },s)
+})
+
+//start(loop,limits)
+
+exponents = R.times(function(i){
+  return Math.pow(limit,i)
+},loops)
+
+function isCombination(combination){
+  count = {}
+  var is = true;
+  for(var i = 0; i<combination.length; i++){
+    var symbol = combination[i]
+    count[symbol] = count[symbol] || 0
+    count[symbol]++
+    is = count[symbol] == 1
+    if(!is){
+      break;
+    }
+  }
+  return is
 }
 
+function findCombinationOnBranch(index){
 
-console.log('predicted start',start(limit,loops))
+  return R.pipe(
+    R.map(
+
+    ),
+    R.filter(isCombination)
+  )(exponents)
+}
+
+function traverse(loops,limit){
+  var startIndex = start(loops,limit)
+  var combinations = indexesFromCount(loops,limit,startIndex)
+  var prevIndex = startIndex;
+  var visited = [prevIndex]
+  for(var i = 0; i < exponents.length; i++){
+    var currentIndex = prevIndex - startexponents[i];
+
+    visited = currentIndex
+
+    var possibleCombo = indexesFromCOunt(loops,limits,currentIndex);
+    if(isCombination(possibleCombo)){
+      //check all exponents on new index
+        currentIndex = prevIndex;
+        i = -1;
+    }
+  }
+}
+
+//traverse(loops,limit)
+
+
+//console.log('predicted start',start(limit,loops),indexesFromCount(limit,limit,loops))
